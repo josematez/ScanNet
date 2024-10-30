@@ -1,0 +1,1 @@
+Here, the ROS1 bags are automatically saved after executing create_rosbag.sh

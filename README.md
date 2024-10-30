@@ -1,4 +1,4 @@
-This repository aims to facilitate the automatic creation of bags for both, ROS1 and ROS2, of sequences of the [ScanNet]([https://hkust-vgd.github.io/scenenn/](http://www.scan-net.org/)) dataset. Preview of the available sequences [here](https://kaldir.vc.in.tum.de/scannet_browse/scans/scannet/grouped).
+This repository aims to facilitate the automatic creation of bags for both, ROS1 and ROS2, of sequences of the [ScanNet](https://hkust-vgd.github.io/scenenn/](http://www.scan-net.org/) dataset. Preview of the available sequences [here](https://kaldir.vc.in.tum.de/scannet_browse/scans/scannet/grouped).
 
 # Requeriments
 

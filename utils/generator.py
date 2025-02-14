@@ -1,5 +1,4 @@
 import numpy as np
-from copy import deepcopy
 from cv_bridge import CvBridge
 from rosbags.typesys.stores.ros1_noetic import (
     sensor_msgs__msg__Image as Image,
@@ -11,8 +10,6 @@ from rosbags.typesys.stores.ros1_noetic import (
     geometry_msgs__msg__Quaternion as QuaternionROS1,
     geometry_msgs__msg__Point as Point
 )
-from geometry_msgs.msg import Vector3, Quaternion
-from tf2_msgs.msg import TFMessage, TransformStamped
 
 class GenerateRosbag(object):
 
@@ -70,30 +67,3 @@ class GenerateRosbag(object):
 
 
         return pose_msg
-    
-    def create_tf_msg(self, pose, header):
-
-        tf_msg = TFMessage()
-        tf_msg.transforms = []
-
-        transform = TransformStamped()
-        transform.header = deepcopy(header)
-        transform.header.frame_id = "base_link"
-        transform.child_frame_id = "camera"
-        
-        transform.transform.translation = Vector3(0., 0., 0.)
-        transform.transform.rotation = Quaternion(0., 0., 0., 1.)
-
-        tf_msg.transforms.append(transform)
-
-        transform = TransformStamped()
-        transform.header = deepcopy(header)
-        transform.header.frame_id = "map"
-        transform.child_frame_id = "base_link"
-
-        transform.transform.translation = Vector3(pose[4], pose[5], pose[6])
-        transform.transform.rotation = Quaternion(pose[0], pose[1], pose[2], pose[3])
-
-        tf_msg.transforms.append(transform)
-
-        return tf_msg

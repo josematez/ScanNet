@@ -39,10 +39,6 @@ class ROSbag_generator():
             camera_info = writer.add_connection("camera/camera_info", "sensor_msgs/msg/CameraInfo", typestore=typestore)
             amcl_pose = writer.add_connection("amcl_pose", "geometry_msgs/msg/PoseWithCovarianceStamped", typestore=typestore)
 
-            pose_1 = []
-            pose_2 = []
-            pose_3 = []
-
             origin, xaxis, yaxis, zaxis = (0, 0, 0), (1, 0, 0), (0, 1, 0), (0, 0, 1)
             Rx = rotation_matrix(np.radians(-90), xaxis)
             Ry = rotation_matrix(np.radians(90), yaxis)
@@ -64,10 +60,6 @@ class ROSbag_generator():
                 pose_quat = quaternion_from_matrix(pose)
                 pose_t = pose[:3,3].reshape(-1)
                 pose = [*pose_quat] + [*pose_t]
-
-                pose_1.append(pose_t[0])
-                pose_2.append(pose_t[1])
-                pose_3.append(pose_t[2])
 
                 rgb_msg = rb.create_image_msg(img_rgb, deepcopy(header))
                 rgb_msg = typestore.serialize_ros1(rgb_msg,"sensor_msgs/msg/Image")

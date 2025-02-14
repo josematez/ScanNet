@@ -1,0 +1,14 @@
+**/__pycache__/
+
+# Ignore dataset downloaded/generated files
+**/raw_data/
+!raw_data/info.txt
+!**/raw_data/info.txt
+
+**/to_ros/ROS1_bags/
+!to_ros/ROS1_bags/info.txt
+!**/to_ros/ROS1_bags/info.txt
+
+**/to_ros/ROS2_bags/
+!to_ros/ROS2_bags/info.txt
+!**/to_ros/ROS2_bags/info.txt

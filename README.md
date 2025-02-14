@@ -2,10 +2,10 @@ This repository aims to facilitate the automatic creation of bags for both, ROS1
 
 # Requeriments
 
-It requires the [rosbags-convert](https://pypi.org/project/rosbags/) package in order to convert from ROS1 to ROS2 bags. To install it:
+To setup your environment, simply run:
 
 ```
-pip install rosbags
+pip install -r requirements.txt
 ```
 
 # Installation

@@ -1,4 +1,6 @@
 ##!/bin/sh
+# Exit immediately if a command exits with a non-zero status.
+set -e
 
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 2 ]; then
@@ -26,6 +28,6 @@ else
 fi
 
 python3 $THIS_FILE_DIR/utils/raw_to_rosbag.py --datapath "$THIS_FILE_DIR/raw_data/$scene"
-rosbags-convert "$THIS_FILE_DIR/to_ros/ROS1_bags/$scene.bag"
-mv "$THIS_FILE_DIR/to_ros/ROS1_bags/$scene" "$THIS_FILE_DIR/to_ros/ROS2_bags/$scene"
+echo "Converting ROS1 bag to ROS2 bag..."
+rosbags-convert --src "$THIS_FILE_DIR/to_ros/ROS1_bags/$scene.bag" --dst "$THIS_FILE_DIR/to_ros/ROS2_bags/$scene"
 echo "ROS2 bag saved in: $THIS_FILE_DIR/to_ros/ROS2_bags/$scene"

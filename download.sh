@@ -1,4 +1,6 @@
 ##!/bin/sh
+# Exit immediately if a command exits with a non-zero status.
+set -e
 
 # Check if the correct number of arguments is provided
 if [ "$#" -ne 2 ]; then

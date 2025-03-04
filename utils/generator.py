@@ -54,6 +54,8 @@ class GenerateRosbag(object):
 
     def create_pose_msg(self, pose, header):
 
+        header.frame_id = "map"
+
         pose_msg = PoseWithCovarianceStamped(
             header=header,
             pose=PoseWithCovariance(

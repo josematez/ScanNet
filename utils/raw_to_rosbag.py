@@ -77,7 +77,7 @@ class ROSbag_generator():
                 writer.write(camera_rgb, timestamp, data = rgb_msg)
                 writer.write(camera_depth, timestamp, data = depth_msg)
                 writer.write(camera_info, timestamp, data = cam_info_msg)
-                writer.write(amcl_pose, i, data = pose_msg)
+                writer.write(amcl_pose, timestamp, data = pose_msg)
 
             print("ROS1 bag saved in: {}".format(rosbag_path + self.dataset_path.split("/")[-1] + ".bag"))
 

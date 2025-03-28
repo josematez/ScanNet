@@ -12,3 +12,6 @@
 **/to_ros/ROS2_bags/
 !to_ros/ROS2_bags/info.txt
 !**/to_ros/ROS2_bags/info.txt
+
+# Virtual environments
+.venv/

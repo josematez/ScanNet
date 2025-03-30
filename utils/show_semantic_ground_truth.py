@@ -70,4 +70,4 @@ if __name__ == "__main__":
     plt.savefig(args.output_path)
     # plt.show()
 
-    print(f"Visualization saved to {args.output_path}")
+    print(f"Visualization saved to \n{args.output_path}")

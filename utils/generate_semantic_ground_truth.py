@@ -160,7 +160,8 @@ def main(args):
     # Generate ground truth
     result = generate_semantic_ground_truth(
         args.mesh, args.segs, args.aggregation, optimal_angle=best_angle)
-    print(result)
+    print(
+        f"Generated semantic ground truth with {len(result['instances'])} objects.")
 
     # Save the result to a JSON file
     with open(args.output_path, "w") as f:

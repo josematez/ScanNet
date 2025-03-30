@@ -3,39 +3,59 @@
 set -e
 
 # Check if the correct number of arguments is provided
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <scene_id> and $1 <sequence_id>: (Hint: From ScanNet <scene_id>_<sequence_id>)"
+if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+    echo "Usage: $0 <scene_id> <sequence_id> [--evaluation-only]: (Hint: From ScanNet <scene_id>_<sequence_id>)"
     exit 1
 fi
 
 scene_id=$1
 sequence_id=$2
 
+# Check if the evaluation-only flag is set
+EVALUATION_ONLY=false
+if [ "$3" = "--evaluation-only" ]; then
+    EVALUATION_ONLY=true
+fi
+
 scene_id=$(printf "%04d" "$scene_id")
 sequence_id=$(printf "%02d" "$sequence_id")
-THIS_FILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 scene="scene"$scene_id"_"$sequence_id
 
-echo "Processing scene: $scene"
+THIS_FILE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RAW_DATA_DIR="$THIS_FILE_DIR/raw_data/"
+EVALUATION_DIR="$THIS_FILE_DIR/evaluation/"
 
 SCANNET_URL="https://kaldir.vc.in.tum.de/scannet/v1/scans/"
 
-cd $THIS_FILE_DIR/raw_data
+echo "Processing scene: $scene"
 
-[ ! -d "$scene" ] && mkdir "$scene"
+if [ "$EVALUATION_ONLY" = false ]; then
+    # RAW_DATA PART
 
-cd $THIS_FILE_DIR/raw_data/$scene
+    cd "$RAW_DATA_DIR" || exit
 
-echo "Downloading .sens file..."
-if [ ! -f "$scene.sens" ]; then
-    wget "$SCANNET_URL$scene/$scene.sens"
-else
-    echo "$scene.sens already exists. Skipping download."
+    mkdir -p "$scene"
+
+    cd "$RAW_DATA_DIR/$scene" || exit
+
+    echo "Downloading .sens file..."
+    if [ ! -f "$scene.sens" ]; then
+        wget "$SCANNET_URL$scene/$scene.sens"
+    else
+        echo "$scene.sens already exists. Skipping download."
+    fi
+
+    echo "Extracting data (RGB-D images, poses and intrinsics)..."
+    python3 $THIS_FILE_DIR/utils/"reader.py" --filename $THIS_FILE_DIR/raw_data/$scene/$scene.sens --output_path $THIS_FILE_DIR/raw_data/$scene --export_depth_images --export_color_images --export_poses --export_intrinsics
 fi
 
-echo "Extracting data (RGB-D images, poses and intrinsics)..."
-python3 $THIS_FILE_DIR/utils/"reader.py" --filename $THIS_FILE_DIR/raw_data/$scene/$scene.sens --output_path $THIS_FILE_DIR/raw_data/$scene --export_depth_images --export_color_images --export_poses --export_intrinsics
+# EVALUATION PART
+
+cd "$EVALUATION_DIR" || exit
+
+mkdir -p "$scene"
+
+cd "$EVALUATION_DIR/$scene" || exit
 
 echo "Downloading .ply mesh file..."
 if [ ! -f "${scene}_vh_clean_2.ply" ]; then
@@ -60,13 +80,13 @@ fi
 
 echo "Generating semantic ground truth..."
 python3 $THIS_FILE_DIR/utils/generate_semantic_ground_truth.py \
-    $THIS_FILE_DIR/raw_data/$scene/${scene}_vh_clean_2.ply \
-    $THIS_FILE_DIR/raw_data/$scene/${scene}_vh_clean_2.0.010000.segs.json \
-    $THIS_FILE_DIR/raw_data/$scene/${scene}.aggregation.json \
-    -o $THIS_FILE_DIR/raw_data/$scene/${scene}_semantic_ground_truth.json \
+    $EVALUATION_DIR/$scene/${scene}_vh_clean_2.ply \
+    $EVALUATION_DIR/$scene/${scene}_vh_clean_2.0.010000.segs.json \
+    $EVALUATION_DIR/$scene/${scene}.aggregation.json \
+    -o $EVALUATION_DIR/$scene/semantic_ground_truth.json \
     --angle-step 1
 
 echo "Showing semantic ground truth..."
 python3 $THIS_FILE_DIR/utils/show_semantic_ground_truth.py \
-    --input $THIS_FILE_DIR/raw_data/$scene/${scene}_semantic_ground_truth.json \
-    --output $THIS_FILE_DIR/raw_data/$scene/${scene}_semantic_ground_truth.png
+    -i $EVALUATION_DIR/$scene/semantic_ground_truth.json \
+    -o $EVALUATION_DIR/$scene/semantic_ground_truth.png

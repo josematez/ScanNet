@@ -5,6 +5,10 @@
 !raw_data/info.txt
 !**/raw_data/info.txt
 
+**/evaluation/
+!evaluation/info.txt
+!**/evaluation/info.txt
+
 **/to_ros/ROS1_bags/
 !to_ros/ROS1_bags/info.txt
 !**/to_ros/ROS1_bags/info.txt

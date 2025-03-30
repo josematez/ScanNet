@@ -8,15 +8,15 @@ if __name__ == "__main__":
     # Configure arguments
     parser = argparse.ArgumentParser(
         description="Visualize semantic ground truth map.")
-    parser.add_argument("--input", type=str, required=True,
+    parser.add_argument("-i", "--input-path", type=str, required=True,
                         help="Path to the input JSON file.")
-    parser.add_argument("--output", type=str, required=True,
+    parser.add_argument("-o", "--output-path", type=str, required=True,
                         help="Path to save the output visualization.")
 
     args = parser.parse_args()
 
     # Load the generated JSON
-    with open(args.input, "r") as f:
+    with open(args.input_path, "r") as f:
         data = json.load(f)
 
     instances = data["instances"]
@@ -64,8 +64,10 @@ if __name__ == "__main__":
     plt.ylim(y_min - margin, y_max + margin)
     plt.xlabel("X coordinate")
     plt.ylabel("Y coordinate")
-    plt.title("Semantic Ground Truth Map Visualization")
+    plt.title(f"Visualization of the map for {args.input_path}")
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(args.output)
-    plt.show()
+    plt.savefig(args.output_path)
+    # plt.show()
+
+    print(f"Visualization saved to {args.output_path}")

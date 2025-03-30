@@ -1,0 +1,1 @@
+Here, the ground truth of the ScanNet dataset is automatically saved for the downloaded sequences using the download.sh script.

@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     # Use a colormap to assign a distinct color to each object
     num_objs = len(instances)
-    colors = plt.cm.get_cmap("tab20", num_objs)
+    colors = plt.get_cmap("tab20", num_objs)
 
     # Initialize limits to adjust the visualization
     x_min, x_max = float('inf'), float('-inf')
